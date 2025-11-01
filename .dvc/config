@@ -1,4 +1,6 @@
 [core]
-    remote = myremote
+    remote = local_remote
 ['remote "myremote"']
     url = s3://mlops-api-rns
+['remote "local_remote"']
+    url = ../../dvc_storage
