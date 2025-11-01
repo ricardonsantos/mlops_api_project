@@ -2,7 +2,7 @@ import pandas as pd
 import logging
 
 logging.basicConfig(level=logging.INFO)
-def data_preprocessing(input_file: str, output_file: str, target_col : str = 'salary'):
+def data_cleaning(input_file: str, output_file: str, target_col : str = 'salary'):
     """
     Preprocess raw data (cleaning and value inputers) 
     """
@@ -26,14 +26,14 @@ def data_preprocessing(input_file: str, output_file: str, target_col : str = 'sa
     logging.info('checking for columns with Null values')
     if df.isnull().any().any():
         logging.info('Null values found. Using value inputers')
-        for c in categorical_cols.drop('salary'):
+        for c in categorical_cols.drop(target_col):
             df[c] = df[c].fillna(df[c].mode()[0])
         for n in numerical_cols:
             df[n] = df[n].fillna(df[n].mean())
-    logging.info('done')
+    logging.info('done!')
     
     logging.info(f'persisting file output as {output_file}')
     df.to_csv(output_file, index=False)
 
 if __name__ == '__main__':
-    data_preprocessing('data/census.csv', 'data/census_preprocessed.csv')
+    data_cleaning('data/census.csv', 'data/census_clean.csv')
