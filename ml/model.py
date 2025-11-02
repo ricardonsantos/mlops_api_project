@@ -1,4 +1,12 @@
+import pandas as pd
+
 from sklearn.metrics import fbeta_score, precision_score, recall_score
+from sklearn.ensemble import GradientBoostingClassifier
+
+from ml.preprocess import process_data
+
+import joblib
+import logging
 
 
 def train_model(X_train, y_train):
@@ -16,7 +24,10 @@ def train_model(X_train, y_train):
     model : RandomForestClassifier
         Trained machine learning model.
     """
-    pass
+    model = GradientBoostingClassifier()
+    model.fit(X_train, y_train)
+
+    return model
 
 
 def compute_model_metrics(y, preds):
@@ -55,4 +66,24 @@ def inference(model, X):
     preds : np.ndarray
         Predictions from the model.
     """
-    pass
+    pred = model.predict(X)
+    return pred
+
+def model_save(model, output_path):
+    """
+    Persist fitted model
+    """
+    joblib.dump(model, output_path)
+
+def model_load(path):
+    """
+    Load a trained model artifact
+    """
+    lb = joblib.load("/".join([path,'lb.joblib']))
+    encoder = joblib.load("/".join([path,'encoder.joblib']))
+    model = joblib.load("/".join([path,'model.joblib']))
+    return model, encoder, lb
+
+
+
+

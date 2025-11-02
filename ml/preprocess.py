@@ -1,4 +1,5 @@
 import numpy as np
+import logging
 from sklearn.preprocessing import LabelBinarizer, OneHotEncoder
 
 
@@ -64,7 +65,7 @@ def process_data(
             y = lb.transform(y.values).ravel()
         # Catch the case where y is None because we're doing inference.
         except AttributeError:
-            pass
+            logging.info('No labels provided (inference mode)')
 
     X = np.concatenate([X_continuous, X_categorical], axis=1)
     return X, y, encoder, lb
